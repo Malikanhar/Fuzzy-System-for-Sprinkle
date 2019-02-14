@@ -4,8 +4,14 @@ def graphicUp(x, a, b):
 def graphicDown(x, a, b):
     return ((a-x)/(a-b))
 
+def graphicUp(x, a, b):
+    return ((x-b)/(a-b))
+
+def graphicDown(x, a, b):
+    return ((a-x)/(a-b))
+
 def temperatureMF(x):
-    l = []
+    d = {}
     LabelSN=""
     LabelST=""
     SN=0;
@@ -46,13 +52,12 @@ def temperatureMF(x):
         SN=1
         LabelSN="hot"
     if(LabelSN!="" and SN!=0):
-        l.append({LabelSN : SN})
+        d = {LabelSN : SN}
     if(LabelST!="" and ST!=0):
-        l.append({LabelST : ST})
-    return l
+        d.update({LabelST : ST})
+    return d
 
 def humidityMF(x):
-    l = []
     LabelLN=""
     LabelLT=""
     LN=0;
@@ -77,7 +82,44 @@ def humidityMF(x):
         LN=1
         LabelLN="wet"
     if(LabelLN!="" and LN!=0):
-        l.append({LabelLN : LN})
+        d = {LabelLN : LN}
     if(LabelLT!="" and LT!=0):
-        l.append({LabelLT : LT})
-    return l
+        d.update({LabelLT : LT})
+    return d
+
+def rules(d1, d2):
+    res = {}
+    for key1 in d1:
+        for key2 in d2:
+            if(key1 == "cold" and key2 == "dry"):
+                res.update({"long":min(d1[key1], d2[key2])})
+            elif(key1=="cold" and key2=="moist"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="cold" and key2=="wet"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="mild" and key2=="dry"):
+                res.update({"long":min(d1[key1], d2[key2])})
+            elif(key1=="mild" and key2=="moist"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="mild" and key2=="wet"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="normal" and key2=="dry"):
+                res.update({"long":min(d1[key1], d2[key2])})
+            elif(key1=="normal" and key2=="moist"):
+                res.update({"medium":min(d1[key1], d2[key2])})
+            elif(key1=="normal" and key2=="wet"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="warm" and key2=="dry"):
+                res.update({"long":min(d1[key1], d2[key2])})
+            elif(key1=="warm" and key2=="moist"):
+                res.update({"medium":min(d1[key1], d2[key2])})
+            elif(key1=="warm" and key2=="wet"):
+                res.update({"short":min(d1[key1], d2[key2])})
+            elif(key1=="hot" and key2=="dry"):
+                res.update({"long":min(d1[key1], d2[key2])})
+            elif(key1=="hot" and key2=="moist"):
+                res.update({"medium":min(d1[key1], d2[key2])})
+            elif(key1=="hot" and key2=="wet"):
+                res.update({"short":min(d1[key1], d2[key2])})
+    return res
+
