@@ -122,3 +122,24 @@ def defuzzy(dic):
         div += dic[e]
     return total/div
 
+def getHumidtyInput():
+    humd = None
+    while humd is None:
+        try:
+            humd = float(input('Humidity : '))
+        except ValueError:
+            print ("Please input a valid number".format(humd))
+    return humd
+
+def getTemperatureInput():
+    temp = None
+    while temp is None:
+        try:
+            temp = float(input('Temperature : '))
+        except ValueError:
+            print ("Please input a valid number".format(temp))
+    return temp
+
+if __name__ == '__main__':
+    fin = defuzzy(rules(humidityMF(getHumidtyInput()), temperatureMF(getTemperatureInput())))
+    print("The watering duration is",int(fin),"minutes")
