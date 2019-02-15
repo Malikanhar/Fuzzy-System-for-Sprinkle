@@ -4,12 +4,6 @@ def graphicUp(x, a, b):
 def graphicDown(x, a, b):
     return ((a-x)/(a-b))
 
-def graphicUp(x, a, b):
-    return ((x-b)/(a-b))
-
-def graphicDown(x, a, b):
-    return ((a-x)/(a-b))
-
 def temperatureMF(x):
     d = {}
     LabelSN=""
@@ -91,35 +85,40 @@ def rules(d1, d2):
     res = {}
     for key1 in d1:
         for key2 in d2:
-            if(key1 == "cold" and key2 == "dry"):
-                res.update({"long":min(d1[key1], d2[key2])})
-            elif(key1=="cold" and key2=="moist"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="cold" and key2=="wet"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="mild" and key2=="dry"):
-                res.update({"long":min(d1[key1], d2[key2])})
-            elif(key1=="mild" and key2=="moist"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="mild" and key2=="wet"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="normal" and key2=="dry"):
-                res.update({"long":min(d1[key1], d2[key2])})
-            elif(key1=="normal" and key2=="moist"):
-                res.update({"medium":min(d1[key1], d2[key2])})
-            elif(key1=="normal" and key2=="wet"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="warm" and key2=="dry"):
-                res.update({"long":min(d1[key1], d2[key2])})
-            elif(key1=="warm" and key2=="moist"):
-                res.update({"medium":min(d1[key1], d2[key2])})
-            elif(key1=="warm" and key2=="wet"):
-                res.update({"short":min(d1[key1], d2[key2])})
-            elif(key1=="hot" and key2=="dry"):
-                res.update({"long":min(d1[key1], d2[key2])})
-            elif(key1=="hot" and key2=="moist"):
-                res.update({"medium":min(d1[key1], d2[key2])})
-            elif(key1=="hot" and key2=="wet"):
-                res.update({"short":min(d1[key1], d2[key2])})
+            minn = min(d1[key1], d2[key2])
+            if(key1 == "dry"):
+                if("long" in res and minn < res["long"]):
+                    res.update({"long":minn})
+                else:
+                    res.update({"long":minn})
+            elif(key1 == "wet" and minn < res["short"]):
+                if("wet" in res):
+                    res.update({"short":minn})
+                else:
+                    res.update({"short":minn})
+            else:
+                if(key2 == "cold" or key2 == "mild"):
+                    if("short" in res and minn < res["short"]):
+                        res.update({"short":minn})
+                    else:
+                        res.update({"short":minn})
+                else:
+                    if("medium" in res and minn < res["medium"]):
+                        res.update({"medium":minn})
+                    else:
+                        res.update({"medium":minn})
     return res
+
+def defuzzy(dic):
+    total = 0
+    div = 0
+    for e in dic:
+        if(e == "short"):
+            total += dic[e]*20
+        elif(e == "medium"):
+            total += dic[e]*40
+        else:
+            total += dic[e]*60
+        div += dic[e]
+    return total/div
 
